@@ -41,8 +41,9 @@ namespace NServiceBus.Marten.Internal
                 _.Connection(connectionString);
 
                 _.Schema.For<SagaDocument>()
-                        .Index(x => x.CorrelationProperty)
-                        .Index(x => x.CorrelationPropertyValue);
+                    .Index(x => x.CorrelationProperty)
+                    .Index(x => x.CorrelationPropertyValue)
+                    .Index(x => x.Type);
 
                 //Todo: Change to none
                 _.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;

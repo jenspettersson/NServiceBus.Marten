@@ -4,7 +4,7 @@ using NServiceBus.Persistence;
 
 namespace NServiceBus.Marten.SessionManagement
 {
-    internal class MartenSynchronizedStorageSession : CompletableSynchronizedStorageSession
+    public class MartenSynchronizedStorageSession : CompletableSynchronizedStorageSession
     {
         private readonly bool _ownsSession;
         public IDocumentSession Session { get; }

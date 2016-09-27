@@ -8,5 +8,6 @@ namespace NServiceBus.Marten.Sagas
         public IContainSagaData SagaData { get; set; }
         public string CorrelationProperty { get; set; }
         public string CorrelationPropertyValue { get; set; }
+        public string Type { get; set; }
     }
 }

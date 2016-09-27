@@ -19,8 +19,15 @@ namespace NServiceBus.Marten.Sagas
             {
                 return;
             }
-            
-            var sagaDocument = new SagaDocument {Id = sagaData.Id, SagaData = sagaData, CorrelationProperty = correlationProperty.Name, CorrelationPropertyValue = correlationProperty.Value.ToString()};
+
+            var sagaDocument = new SagaDocument
+            {
+                Id = sagaData.Id,
+                SagaData = sagaData,
+                CorrelationProperty = correlationProperty.Name,
+                CorrelationPropertyValue = correlationProperty.Value.ToString(),
+                Type = sagaData.GetType().FullName
+            };
 
             documentSession.Store(sagaDocument);
         }
@@ -45,9 +52,12 @@ namespace NServiceBus.Marten.Sagas
         {
             var documentSession = session.MartenSession();
 
+            var sagaType = typeof(TSagaData).FullName;
+
             var sagaDocument = await documentSession.Query<SagaDocument>()
                 .Where(x => x.CorrelationProperty == propertyName)
                 .Where(x => x.CorrelationPropertyValue == propertyValue.ToString())
+                .Where(x => x.Type == sagaType)
                 .FirstOrDefaultAsync();
 
             if (sagaDocument == null)

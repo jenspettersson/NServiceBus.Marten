@@ -81,10 +81,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MartenTestBaseForSagaPersistenceOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="MartenPersistenceTestBase.cs" />
+    <Compile Include="Sagas\When_completing_a_saga.cs" />
+    <Compile Include="Sagas\When_fetching_a_saga_by_correlation_property.cs" />
+    <Compile Include="Sagas\When_persisting_a_saga.cs" />
+    <Compile Include="Sagas\When_updating_a_saga.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NServiceBus.Marten\NServiceBus.Marten.csproj">
+      <Project>{C6E444A9-FAFF-403A-9B22-8CAC8288A6E5}</Project>
+      <Name>NServiceBus.Marten</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
