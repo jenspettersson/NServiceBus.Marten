@@ -78,11 +78,16 @@
     <Compile Include="Internal\SingleSharedDocumentStore.cs" />
     <Compile Include="MartenPersistence.cs" />
     <Compile Include="MartenSettingsExtensions.cs" />
+    <Compile Include="Outbox\MartenOutboxExtensions.cs" />
+    <Compile Include="Outbox\MartenOutboxStorage.cs" />
+    <Compile Include="Outbox\OutboxPersister.cs" />
+    <Compile Include="Outbox\OutboxRecord.cs" />
+    <Compile Include="Outbox\OutboxRecordsCleaner.cs" />
     <Compile Include="Sagas\MartenSagaSettingsExtensions.cs" />
     <Compile Include="Sagas\MartenSagaStorage.cs" />
     <Compile Include="Sagas\SagaDocument.cs" />
     <Compile Include="Sagas\SagaPersister.cs" />
-    <Compile Include="SessionManagement\MartenOutboxTransaction.cs" />
+    <Compile Include="Outbox\MartenOutboxTransaction.cs" />
     <Compile Include="SessionManagement\MartenSessionExtension.cs" />
     <Compile Include="SessionManagement\MartenStorageSession.cs" />
     <Compile Include="SessionManagement\MartenSynchronizedStorage.cs" />

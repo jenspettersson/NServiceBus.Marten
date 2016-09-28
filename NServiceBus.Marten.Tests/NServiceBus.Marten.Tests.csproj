@@ -87,6 +87,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MartenTestBaseForSagaPersistenceOptions.cs" />
+    <Compile Include="Outbox\When_adding_outbox_messages.cs" />
+    <Compile Include="Outbox\When_cleaning_outbox_messages.cs" />
     <Compile Include="Persistence\DocumentStoreManagerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="MartenPersistenceTestBase.cs" />

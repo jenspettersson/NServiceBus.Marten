@@ -2,7 +2,7 @@
 using Marten;
 using NServiceBus.Outbox;
 
-namespace NServiceBus.Marten.SessionManagement
+namespace NServiceBus.Marten.Outbox
 {
     class MartenOutboxTransaction : OutboxTransaction
     {

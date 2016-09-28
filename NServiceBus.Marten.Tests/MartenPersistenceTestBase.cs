@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Marten;
+using NServiceBus.Marten.Outbox;
 using NServiceBus.Marten.Timeouts;
 using NUnit.Framework;
 
@@ -20,6 +21,7 @@ namespace NServiceBus.Marten.Tests
                 _.AutoCreateSchemaObjects = AutoCreate.All;
 
                 _.Schema.For<TimeoutDocument>().UseOptimisticConcurrency(true);
+                _.Schema.For<OutboxRecord>().UseOptimisticConcurrency(true);
             });
         }
 

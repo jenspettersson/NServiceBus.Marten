@@ -68,6 +68,59 @@ namespace LabConsole
     {
         public async Task<IEndpointInstance> Run()
         {
+            var sharedDocumentStore = CreateSharedDocumentStore();
+            var sagaDocumentStore = CreateSagaDocumentStore();
+            var timeoutsDocumentStore = CreateTimeoutsDocumentStore();
+
+            var endpointConfiguration = new EndpointConfiguration("postgres.lab");
+            endpointConfiguration.SendFailedMessagesTo("postgres.lab.error");
+            endpointConfiguration.UseSerialization<JsonSerializer>();
+            endpointConfiguration.EnableInstallers();
+
+
+            var persistenceExtensions = endpointConfiguration.UsePersistence<MartenPersistence>();
+            persistenceExtensions.SetDefaultDocumentStore(sharedDocumentStore);
+
+            //persistenceExtensions.UseDocumentStoreForSagas(sagaDocumentStore);
+            //persistenceExtensions.UseDocumentStoreForTimeouts(timeoutsDocumentStore);
+            
+
+            endpointConfiguration.UsePersistence<InMemoryPersistence, StorageType.GatewayDeduplication>();
+            endpointConfiguration.UsePersistence<InMemoryPersistence, StorageType.Outbox>();
+            endpointConfiguration.UsePersistence<InMemoryPersistence, StorageType.Subscriptions>();
+
+            var transport = endpointConfiguration.UseTransport<RabbitMQTransport>();
+            transport.ConnectionStringName("NServiceBus.RabbitMQ.ConnectionString");
+
+            var recoverabilitySettings = endpointConfiguration.Recoverability();
+            recoverabilitySettings.Immediate(x => x.NumberOfRetries(0));
+            recoverabilitySettings.Delayed(x => x.NumberOfRetries(2).TimeIncrease(TimeSpan.FromSeconds(5)));
+
+            return await Endpoint.Start(endpointConfiguration);
+        }
+
+        private static DocumentStore CreateSharedDocumentStore()
+        {
+            var sagaConnectionString = "host=localhost;database=nsb.persistence;username=postgres;password=admin";
+            var sagaDocumentStore = DocumentStore.For(_ =>
+            {
+                _.Connection(sagaConnectionString);
+
+                _.Schema.For<SagaDocument>()
+                    .Index(x => x.CorrelationProperty)
+                    .Index(x => x.CorrelationPropertyValue)
+                    .Index(x => x.Type);
+
+                _.Schema.For<TimeoutDocument>().UseOptimisticConcurrency(true);
+
+                //Todo: Change to none
+                _.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
+            });
+            return sagaDocumentStore;
+        }
+
+        private static DocumentStore CreateSagaDocumentStore()
+        {
             var sagaConnectionString = "host=localhost;database=nsb.persistence.sagas;username=postgres;password=admin";
             var sagaDocumentStore = DocumentStore.For(_ =>
             {
@@ -83,7 +136,11 @@ namespace LabConsole
                 //Todo: Change to none
                 _.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
             });
+            return sagaDocumentStore;
+        }
 
+        private static DocumentStore CreateTimeoutsDocumentStore()
+        {
             var timeoutsConnectionString = "host=localhost;database=nsb.persistence.timeouts;username=postgres;password=admin";
 
             var timeoutsDocumentStore = DocumentStore.For(_ =>
@@ -94,34 +151,7 @@ namespace LabConsole
                 //Todo: Change to none
                 _.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
             });
-
-            var endpointConfiguration = new EndpointConfiguration("postgres.lab");
-            endpointConfiguration.SendFailedMessagesTo("postgres.lab.error");
-            endpointConfiguration.UseSerialization<JsonSerializer>();
-            endpointConfiguration.EnableInstallers();
-
-
-            var persistenceExtensions = endpointConfiguration.UsePersistence<MartenPersistence>();
-            persistenceExtensions.UseDocumentStoreForSagas(sagaDocumentStore);
-            persistenceExtensions.UseDocumentStoreForTimeouts(timeoutsDocumentStore);
-            //var sagaPersistence = endpointConfiguration.UsePersistence<MartenPersistence, StorageType.Sagas>();
-            //sagaPersistence.UseDocumentStoreForSagas(sagaDocumentStore);
-
-            //var timeoutPersistence = endpointConfiguration.UsePersistence<MartenPersistence, StorageType.Timeouts>();
-            //timeoutPersistence.UseDocumentStoreForTimeouts(timeoutsDocumentStore);
-
-            endpointConfiguration.UsePersistence<InMemoryPersistence, StorageType.GatewayDeduplication>();
-            endpointConfiguration.UsePersistence<InMemoryPersistence, StorageType.Outbox>();
-            endpointConfiguration.UsePersistence<InMemoryPersistence, StorageType.Subscriptions>();
-
-            var transport = endpointConfiguration.UseTransport<RabbitMQTransport>();
-            transport.ConnectionStringName("NServiceBus.RabbitMQ.ConnectionString");
-
-            var recoverabilitySettings = endpointConfiguration.Recoverability();
-            recoverabilitySettings.Immediate(x => x.NumberOfRetries(0));
-            recoverabilitySettings.Delayed(x => x.NumberOfRetries(2).TimeIncrease(TimeSpan.FromSeconds(5)));
-
-            return await Endpoint.Start(endpointConfiguration);
+            return timeoutsDocumentStore;
         }
     }
 

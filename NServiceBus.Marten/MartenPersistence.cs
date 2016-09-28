@@ -1,4 +1,5 @@
 ﻿using NServiceBus.Features;
+using NServiceBus.Marten.Internal;
 using NServiceBus.Marten.Sagas;
 using NServiceBus.Marten.SessionManagement;
 using NServiceBus.Marten.Timeouts;
@@ -13,7 +14,7 @@ namespace NServiceBus.Marten
             Defaults(s =>
             {
                 s.EnableFeatureByDefault<MartenStorageSession>();
-                
+                s.EnableFeatureByDefault<SharedDocumentStore>();
             });
 
             Supports<StorageType.Sagas>(s => s.EnableFeatureByDefault<MartenSagaStorage>());

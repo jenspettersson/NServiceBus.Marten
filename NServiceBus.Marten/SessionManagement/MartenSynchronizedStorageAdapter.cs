@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using System.Transactions;
 using NServiceBus.Extensibility;
+using NServiceBus.Marten.Outbox;
 using NServiceBus.Outbox;
 using NServiceBus.Persistence;
 using NServiceBus.Transport;
