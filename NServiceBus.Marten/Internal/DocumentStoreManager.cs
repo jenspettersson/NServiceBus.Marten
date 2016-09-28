@@ -25,7 +25,7 @@ namespace NServiceBus.Marten.Internal
             {
                 //{typeof(StorageType.GatewayDeduplication), "RavenDbDocumentStore/GatewayDeduplication"},
                 //{typeof(StorageType.Subscriptions), "RavenDbDocumentStore/Subscription"},
-                //{typeof(StorageType.Outbox), "RavenDbDocumentStore/Outbox"},
+                {typeof(StorageType.Outbox), "RavenDbDocumentStore/Outbox"},
                 {typeof(StorageType.Sagas), "RavenDbDocumentStore/Saga"},
                 {typeof(StorageType.Timeouts), "RavenDbDocumentStore/Timeouts"}
             };
@@ -34,7 +34,7 @@ namespace NServiceBus.Marten.Internal
             {
                 //{typeof(StorageType.GatewayDeduplication), "NServiceBus/Persistence/Marten/GatewayDeduplication"},
                 //{typeof(StorageType.Subscriptions), "NServiceBus/Persistence/Marten/Subscription"},
-                //{typeof(StorageType.Outbox), "NServiceBus/Persistence/Marten/Outbox"},
+                {typeof(StorageType.Outbox), "NServiceBus/Persistence/Marten/Outbox"},
                 {typeof(StorageType.Sagas), "NServiceBus/Persistence/Marten/Saga"},
                 {typeof(StorageType.Timeouts), "NServiceBus/Persistence/Marten/Timeout"}
             };

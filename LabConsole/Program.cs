@@ -6,7 +6,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Marten;
 using NServiceBus;
+using NServiceBus.InMemory.Outbox;
 using NServiceBus.Marten;
+using NServiceBus.Marten.Outbox;
 using NServiceBus.Marten.Sagas;
 using NServiceBus.Marten.Timeouts;
 using NServiceBus.Persistence;
@@ -77,6 +79,9 @@ namespace LabConsole
             endpointConfiguration.UseSerialization<JsonSerializer>();
             endpointConfiguration.EnableInstallers();
 
+            endpointConfiguration.EnableOutbox();
+            endpointConfiguration.SetTimeToKeepDeduplicationData(TimeSpan.FromSeconds(15));
+            endpointConfiguration.SetFrequencyToRunDeduplicationDataCleanup(TimeSpan.FromSeconds(30));
 
             var persistenceExtensions = endpointConfiguration.UsePersistence<MartenPersistence>();
             persistenceExtensions.SetDefaultDocumentStore(sharedDocumentStore);
@@ -86,7 +91,7 @@ namespace LabConsole
             
 
             endpointConfiguration.UsePersistence<InMemoryPersistence, StorageType.GatewayDeduplication>();
-            endpointConfiguration.UsePersistence<InMemoryPersistence, StorageType.Outbox>();
+            //endpointConfiguration.UsePersistence<InMemoryPersistence, StorageType.Outbox>();
             endpointConfiguration.UsePersistence<InMemoryPersistence, StorageType.Subscriptions>();
 
             var transport = endpointConfiguration.UseTransport<RabbitMQTransport>();

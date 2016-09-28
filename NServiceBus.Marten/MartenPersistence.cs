@@ -1,5 +1,6 @@
 ﻿using NServiceBus.Features;
 using NServiceBus.Marten.Internal;
+using NServiceBus.Marten.Outbox;
 using NServiceBus.Marten.Sagas;
 using NServiceBus.Marten.SessionManagement;
 using NServiceBus.Marten.Timeouts;
@@ -19,6 +20,7 @@ namespace NServiceBus.Marten
 
             Supports<StorageType.Sagas>(s => s.EnableFeatureByDefault<MartenSagaStorage>());
             Supports<StorageType.Timeouts>(s => s.EnableFeatureByDefault<MartenTimoutStorage>());
+            Supports<StorageType.Outbox>(s => s.EnableFeatureByDefault<MartenOutboxStorage>());
         }
     }
 }
