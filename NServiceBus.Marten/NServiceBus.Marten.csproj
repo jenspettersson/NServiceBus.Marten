@@ -85,6 +85,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ContextBagExtensions.cs" />
     <Compile Include="SessionManagement\OpenSessionBehavior.cs" />
+    <Compile Include="Timeouts\MartenTimoutStorage.cs" />
+    <Compile Include="Timeouts\QueryTimeouts.cs" />
+    <Compile Include="Timeouts\TimeoutDocument.cs" />
+    <Compile Include="Timeouts\TimeoutPersister.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

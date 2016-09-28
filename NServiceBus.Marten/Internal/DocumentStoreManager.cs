@@ -2,6 +2,7 @@
 using Marten;
 using NServiceBus.Logging;
 using NServiceBus.Marten.Sagas;
+using NServiceBus.Marten.Timeouts;
 using NServiceBus.Persistence;
 using NServiceBus.Settings;
 
@@ -44,6 +45,8 @@ namespace NServiceBus.Marten.Internal
                     .Index(x => x.CorrelationProperty)
                     .Index(x => x.CorrelationPropertyValue)
                     .Index(x => x.Type);
+
+                _.Schema.For<TimeoutDocument>().UseOptimisticConcurrency(true);
 
                 //Todo: Change to none
                 _.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;

@@ -2,29 +2,31 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Marten;
+using NServiceBus.Marten.Timeouts;
 using NUnit.Framework;
 
 namespace NServiceBus.Marten.Tests
 {
     public class MartenPersistenceTestBase
     {
-        private DocumentStore _documentStore;
         private List<IDocumentSession> _sessions = new List<IDocumentSession>();
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            _documentStore = DocumentStore.For(_ =>
+            store = DocumentStore.For(_ =>
             {
                 _.Connection("host=localhost;database=marten.nservicebus.tests;username=postgres;password=admin");
                 _.AutoCreateSchemaObjects = AutoCreate.All;
+
+                _.Schema.For<TimeoutDocument>().UseOptimisticConcurrency(true);
             });
         }
 
         [SetUp]
-        public void SetUp()
+        public virtual void SetUp()
         {
-            _documentStore.Advanced.Clean.CompletelyRemoveAll();
+            store.Advanced.Clean.CompletelyRemoveAll();
         }
 
         [TearDown]
@@ -36,7 +38,7 @@ namespace NServiceBus.Marten.Tests
 
         protected internal IDocumentSession OpenSession()
         {
-            var documentSession = _documentStore.OpenSession();
+            var documentSession = store.OpenSession();
             
             _sessions.Add(documentSession);
             return documentSession;
@@ -45,7 +47,7 @@ namespace NServiceBus.Marten.Tests
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            _documentStore.Dispose();
+            store.Dispose();
         }
 
         protected static Task<Exception> Catch(Func<Task> action)
@@ -68,5 +70,7 @@ namespace NServiceBus.Marten.Tests
                 return ex;
             }
         }
+
+        protected IDocumentStore store;
     }
 }

@@ -73,6 +73,7 @@
       <HintPath>..\packages\System.Threading.Tasks.Dataflow.4.6.0\lib\netstandard1.1\System.Threading.Tasks.Dataflow.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -88,6 +89,10 @@
     <Compile Include="Sagas\When_fetching_a_saga_by_correlation_property.cs" />
     <Compile Include="Sagas\When_persisting_a_saga.cs" />
     <Compile Include="Sagas\When_updating_a_saga.cs" />
+    <Compile Include="Timeouts\Should_not_skip_timeouts.cs" />
+    <Compile Include="Timeouts\When_adding_timeouts.cs" />
+    <Compile Include="Timeouts\When_fetching_timeouts_from_storage.cs" />
+    <Compile Include="Timeouts\When_removing_timeouts_from_storage.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
