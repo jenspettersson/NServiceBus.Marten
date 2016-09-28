@@ -10,6 +10,7 @@ namespace NServiceBus.Marten.Timeouts
         public MartenTimoutStorage()
         {
             DependsOn<TimeoutManager>();
+            //DependsOn<SharedDocumentStore>();
         }
 
         protected override void Setup(FeatureConfigurationContext context)

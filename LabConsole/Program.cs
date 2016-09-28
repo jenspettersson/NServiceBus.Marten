@@ -4,8 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Marten;
 using NServiceBus;
 using NServiceBus.Marten;
+using NServiceBus.Marten.Sagas;
+using NServiceBus.Marten.Timeouts;
 using NServiceBus.Persistence;
 
 namespace LabConsole
@@ -65,15 +68,47 @@ namespace LabConsole
     {
         public async Task<IEndpointInstance> Run()
         {
+            var sagaConnectionString = "host=localhost;database=nsb.persistence.sagas;username=postgres;password=admin";
+            var sagaDocumentStore = DocumentStore.For(_ =>
+            {
+                _.Connection(sagaConnectionString);
+
+                _.Schema.For<SagaDocument>()
+                    .Index(x => x.CorrelationProperty)
+                    .Index(x => x.CorrelationPropertyValue)
+                    .Index(x => x.Type);
+
+                //_.Schema.For<TimeoutDocument>().UseOptimisticConcurrency(true);
+
+                //Todo: Change to none
+                _.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
+            });
+
+            var timeoutsConnectionString = "host=localhost;database=nsb.persistence.timeouts;username=postgres;password=admin";
+
+            var timeoutsDocumentStore = DocumentStore.For(_ =>
+            {
+                _.Connection(timeoutsConnectionString);
+                _.Schema.For<TimeoutDocument>().UseOptimisticConcurrency(true);
+
+                //Todo: Change to none
+                _.AutoCreateSchemaObjects = AutoCreate.CreateOrUpdate;
+            });
+
             var endpointConfiguration = new EndpointConfiguration("postgres.lab");
             endpointConfiguration.SendFailedMessagesTo("postgres.lab.error");
             endpointConfiguration.UseSerialization<JsonSerializer>();
             endpointConfiguration.EnableInstallers();
-            var persistenceExtensions = endpointConfiguration.UsePersistence<MartenPersistence, StorageType.Sagas>();
 
-            //persistenceExtensions.ConnectionString(ConfigurationManager.ConnectionStrings["PostgreSql.Connection"].ConnectionString);
-            
-            endpointConfiguration.UsePersistence<MartenPersistence, StorageType.Timeouts>();
+
+            var persistenceExtensions = endpointConfiguration.UsePersistence<MartenPersistence>();
+            persistenceExtensions.UseDocumentStoreForSagas(sagaDocumentStore);
+            persistenceExtensions.UseDocumentStoreForTimeouts(timeoutsDocumentStore);
+            //var sagaPersistence = endpointConfiguration.UsePersistence<MartenPersistence, StorageType.Sagas>();
+            //sagaPersistence.UseDocumentStoreForSagas(sagaDocumentStore);
+
+            //var timeoutPersistence = endpointConfiguration.UsePersistence<MartenPersistence, StorageType.Timeouts>();
+            //timeoutPersistence.UseDocumentStoreForTimeouts(timeoutsDocumentStore);
 
             endpointConfiguration.UsePersistence<InMemoryPersistence, StorageType.GatewayDeduplication>();
             endpointConfiguration.UsePersistence<InMemoryPersistence, StorageType.Outbox>();

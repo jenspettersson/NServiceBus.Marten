@@ -71,8 +71,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConnectionParameters.cs" />
+    <Compile Include="Internal\DocumentStoreInitializer.cs" />
     <Compile Include="Internal\DocumentStoreManager.cs" />
+    <Compile Include="Internal\SharedDocumentStore.cs" />
+    <Compile Include="Internal\SingleSharedDocumentStore.cs" />
     <Compile Include="MartenPersistence.cs" />
+    <Compile Include="MartenSettingsExtensions.cs" />
+    <Compile Include="Sagas\MartenSagaSettingsExtensions.cs" />
     <Compile Include="Sagas\MartenSagaStorage.cs" />
     <Compile Include="Sagas\SagaDocument.cs" />
     <Compile Include="Sagas\SagaPersister.cs" />
@@ -85,6 +91,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ContextBagExtensions.cs" />
     <Compile Include="SessionManagement\OpenSessionBehavior.cs" />
+    <Compile Include="Timeouts\MartenTimeoutSettingsExtensions.cs" />
     <Compile Include="Timeouts\MartenTimoutStorage.cs" />
     <Compile Include="Timeouts\QueryTimeouts.cs" />
     <Compile Include="Timeouts\TimeoutDocument.cs" />

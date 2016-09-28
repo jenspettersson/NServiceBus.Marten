@@ -13,6 +13,7 @@ namespace NServiceBus.Marten
             Defaults(s =>
             {
                 s.EnableFeatureByDefault<MartenStorageSession>();
+                
             });
 
             Supports<StorageType.Sagas>(s => s.EnableFeatureByDefault<MartenSagaStorage>());
