@@ -6,9 +6,8 @@
     <title>$title$</title>
     <authors>Jens Pettersson</authors>
     <owners>Jens Pettersson</owners>
-    <licenseUrl>http://LICENSE_URL_HERE_OR_DELETE_THIS_LINE</licenseUrl>
-    <projectUrl>http://PROJECT_URL_HERE_OR_DELETE_THIS_LINE</projectUrl>
-    <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
+    <licenseUrl>https://github.com/jenspettersson/NServiceBus.Marten/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/jenspettersson/NServiceBus.Marten</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>PostgreSQL integration for NServicebus using Marten</description>
     <copyright>Copyright 2016</copyright>
