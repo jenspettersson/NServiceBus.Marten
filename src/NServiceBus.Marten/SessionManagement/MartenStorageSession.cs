@@ -14,8 +14,8 @@ namespace NServiceBus.Marten.SessionManagement
 
             IDocumentStore store = DocumentStoreManager.GetDocumentStore<StorageType.Sagas>(context.Settings);
 
-            context.Container.ConfigureComponent<IDocumentStore>(() => store, DependencyLifecycle.SingleInstance);
-            
+            //Todo: Add Provided Session Behavior?
+
             //Todo: make sure this behavior is executed AFTER correct step in pipeline...
             context.Pipeline.Register("OpenMartenSession", new OpenSessionBehavior(store), "Makes sure that there is a Marten IDocumentSession available on the pipeline");
         }
